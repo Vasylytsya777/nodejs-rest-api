@@ -43,14 +43,16 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { name, email, phone } = req.body;
-
   try {
-    if (!name || !email || !phone) {
+    const mandatoryData = ["name", "email", "phone"];
+    if (!req.body.name || !req.body.email || !req.body.phone) {
+      const errMessage = mandatoryData
+        .filter((item) => !Object.keys(req.body).includes(item))
+        .reduce((acc, data) => `${acc} missing required ${data} field;`, "");
       return res.status(400).json({
         status: "error",
         code: 400,
-        message: "missing required name field",
+        message: errMessage,
       });
     } else {
       const newContact = await addContact(req.body);
