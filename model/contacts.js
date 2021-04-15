@@ -1,49 +1,54 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const Contact = require("./schemas/contactSchema");
 
-const contactSchema = new Schema(
-  {
-    name: {
-      type: String,
-      require: true,
-      minlength: 2,
-      maxlength: 50,
-    },
-    email: {
-      type: String,
-      require: true,
-      unique: true,
-      minlength: 5,
-      maxlength: 50,
-    },
-    phone: {
-      type: String,
-      require: true,
-      unique: true,
-      minlength: 8,
-      maxlength: 20,
-    },
-    subscription: {
-      type: String,
-      require: true,
-      minlength: 3,
-      maxlength: 15,
-      enum: ["free", "pro", "premium"],
-      default: "free",
-    },
-    password: {
-      type: String,
-      required: true,
-      minlength: 6,
-      maxlength: 20,
-    },
-    token: {
-      type: String,
-      default: "",
-    },
-  },
-  { versionKey: false, timestamps: true }
-);
+const listContacts = async (userId, { limit = 5, page = "1", sortBy, sortByDesc, filter, sub }) => {
+  const { docs: contacts, totalDocs: total } = await Contact.paginate(
+    sub ? { owner: userId, subscription: sub } : { owner: userId },
+    {
+      limit,
+      page,
+      sort: {
+        ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
+        ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
+      },
+      select: filter ? filter.split("|").join(" ") : "",
+      populate: {
+        path: "owner",
+        select: "name email -_id",
+      },
+    }
+  );
+  return { contacts, total, limit: Number(limit), page: Number(page) };
+};
 
-const Contact = mongoose.model("Contact", contactSchema);
-module.exports = Contact;
+const getContactById = async (contactId) => {
+  const contact = await Contact.findById(contactId).populate({
+    path: "owner",
+    select: "name email -_id",
+  });
+  return contact;
+};
+
+const removeContact = async (contactId) => {
+  const removedContact = await Contact.findByIdAndDelete(contactId);
+  return removedContact;
+};
+
+const addContact = async (body) => {
+  const newContact = await Contact.create(body);
+  return newContact;
+};
+
+const updateContact = async (contactId, body) => {
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
+    new: true,
+  });
+  return updatedContact;
+};
+
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+};
