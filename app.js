@@ -1,10 +1,12 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+
 const path = require("path");
 
 const contactsRouter = require("./routes/api/contactsRoutes");
 const usersRouter = require("./routes/api/usersRoutes");
+
 
 const app = express();
 
@@ -16,8 +18,10 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
+
 // eslint-disable-next-line node/no-path-concat
 app.use("/avatars", express.static(path.join(__dirname + "/public/avatars")));
+
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

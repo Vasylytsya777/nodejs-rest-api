@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const validate = require("./validation");
+
 const userController = require("../../../controller/userController");
+
 const guard = require("../../../helpers/guard");
 
 router.post("/auth/register", validate.register, userController.register);

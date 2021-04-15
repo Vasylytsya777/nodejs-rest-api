@@ -1,3 +1,4 @@
+
 const User = require("./schemas/userSchema");
 
 const findUserByEmail = async (email) => {
@@ -43,3 +44,4 @@ module.exports = {
   patchSub,
   patchAvatar,
 };
+
