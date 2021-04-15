@@ -3,7 +3,9 @@ const router = express.Router();
 
 const validate = require("./validation");
 const validateId = require("./validationId");
-const contactController = require("../../../controllers/contactController");
+
+const contactController = require("../../../controller/contactController");
+
 const guard = require("../../../helpers/guard");
 
 router.get("/", guard, contactController.listContacts);
