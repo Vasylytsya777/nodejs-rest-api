@@ -1,9 +1,5 @@
 const app = require("../app");
-<<<<<<< HEAD
 const mongoDbConnect = require("../services/mongoDb");
-=======
-const mongoDbConnect = require("../services/mongoDB.js");
->>>>>>> master
 
 const PORT = process.env.PORT || 3000;
 
