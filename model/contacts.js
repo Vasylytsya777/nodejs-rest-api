@@ -1,4 +1,3 @@
-
 const Contact = require("./schemas/contactSchema");
 
 const listContacts = async (userId, { limit = 5, page = "1", sortBy, sortByDesc, filter, sub }) => {
@@ -53,4 +52,3 @@ module.exports = {
   addContact,
   updateContact,
 };
-

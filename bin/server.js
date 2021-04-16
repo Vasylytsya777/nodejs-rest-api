@@ -1,7 +1,5 @@
 const app = require("../app");
 
-
-
 const PORT = process.env.PORT || 3000;
 
 const mongoose = require("mongoose");
@@ -23,7 +21,7 @@ const connection = mongoose.connect(DB_HOST, {
 connection
   .then(() => {
     app.listen(PORT, function () {
-      console.log(`Server running. Use our API on port: ${PORT}`);
+      console.log(`Server running. Use our API on port: http://localhost:${PORT}`);
     });
   })
   .catch((err) => {

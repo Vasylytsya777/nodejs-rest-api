@@ -1,4 +1,3 @@
-
 const User = require("./schemas/userSchema");
 
 const findUserByEmail = async (email) => {
@@ -11,13 +10,14 @@ const findUserById = async (id) => {
   return user;
 };
 
-const createNewUser = async ({ email, password, subscription, token, avatarURL }) => {
+const createNewUser = async ({ email, password, subscription, token, avatarURL, verifyToken }) => {
   const user = await new User({
     email,
     password,
     subscription,
     token,
     avatarURL,
+    verifyToken,
   }).save();
   return user;
 };
@@ -36,6 +36,16 @@ const patchAvatar = async (id, avatar) => {
   return user;
 };
 
+const findByVerifyToken = async (verifyToken) => {
+  const user = await User.findOne({ verifyToken });
+  return user;
+};
+
+const updateVerifyToken = async (id, verify, verifyToken) => {
+  const user = await User.findByIdAndUpdate(id, { verify, verifyToken });
+  return user;
+};
+
 module.exports = {
   findUserByEmail,
   findUserById,
@@ -43,5 +53,6 @@ module.exports = {
   updateToken,
   patchSub,
   patchAvatar,
+  findByVerifyToken,
+  updateVerifyToken,
 };
-
